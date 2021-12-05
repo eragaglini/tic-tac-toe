@@ -11,21 +11,26 @@ let currentPlayer = tick_circle;
 
 const drawBoard = (height, width) => {
   for (let i = 0; i < height; i++) {
+    var row = document.createElement("div");
+    row.id = i;
+    board.appendChild(row);
+    spaces[i] = [];
     for (let j = 0; j < width; j++) {
-      var input = document.createElement("input")
+      var input = document.createElement("input");
+      input.id = j;
       input.readOnly = true;
       input.type = "text";
       input.setAttribute('class', 'box'); 
-      board.appendChild(input);
+      row.appendChild(input);
+      //spaces[i].push[j]
     }
-    let br = document.createElement("br");
-    board.appendChild(br);
   }
   const boxes = document.querySelectorAll('.box');
   boxes.forEach((box, i) => {
-    box.setAttribute('id',i);
+    //box.setAttribute('id',i);
     box.addEventListener('click', boxClicked);
   });
+  console.log(spaces);
 };
 
 const resetBoard = () => {
@@ -35,11 +40,11 @@ const resetBoard = () => {
 };
 
 const boxClicked = (e) => {
+  const row_id = e.target.parentNode.id;
   const id = e.target.id;
   console.log(e);
-  if (!spaces[id]) {
-    console.log(spaces[id]);
-    spaces[id] = currentPlayer;
+  if (!spaces[row_id][id]) {
+    spaces[row_id][id] = currentPlayer;
     e.target.value = currentPlayer;
 
     if (playerWon()) {
@@ -64,10 +69,11 @@ const boxClicked = (e) => {
     }
     currentPlayer = currentPlayer === tick_circle ? tick_x : tick_circle;
   }
+  //console.log(spaces);
 };
 
 const playerWon = () => {
-  return true;
+  return false;
 };
 
 const playerDraw = () => {
