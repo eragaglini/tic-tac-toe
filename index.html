@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- https://www.studytonight.com/post/building-a-tic-tac-toe-game-in-javascript -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nerko+One&display=swap" rel="stylesheet">
+    <script src="./script.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="heading">Play</h1>
+        <div id="menu">
+            <h2>Seleziona la griglia con cui giocare</h2>
+            <div class="options">
+                <div class="custom-select" style="width:200px;">
+                    <label for="height">Height:</label>
+                    <select id = "height">
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                </div>
+                <div class="custom-select" style="width:200px;">
+                    <label for="width">Width:</label>
+                    <select id = "width">
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <button id="restart">Restart</button>
+        <div id="board">
+        </div>
+        
+    </div>
+</body>
+
+</html>
