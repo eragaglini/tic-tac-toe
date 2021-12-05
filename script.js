@@ -69,11 +69,15 @@ const boxClicked = (e) => {
     }
     currentPlayer = currentPlayer === tick_circle ? tick_x : tick_circle;
   }
-  //console.log(spaces);
 };
 
 const playerWon = () => {
-  return false;
+  const allEqual = arr => arr.every( v => v === currentPlayer )
+  for (let index = 0; index < spaces.length; index++) {
+    if (allEqual(spaces[i])){
+      return true;
+    }
+  }
 };
 
 const playerDraw = () => {
