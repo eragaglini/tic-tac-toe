@@ -1,6 +1,5 @@
 const boxes = document.querySelectorAll('.box');
 const text = document.querySelector('#heading');
-const strategy = document.querySelector('#strategy');
 const restartBtn = document.querySelector('#restart');
 const board = document.querySelector('#board');
 
@@ -9,28 +8,26 @@ const tick_circle = 'O';
 const tick_x = 'X';
 let currentPlayer = tick_circle;
 
-const drawBoard = (height, width) => {
-  for (let i = 0; i < height; i++) {
+const drawBoard = (size) => {
+  for (let i = 0; i < size; i++) {
     var row = document.createElement("div");
     row.id = i;
     board.appendChild(row);
     spaces[i] = [];
-    for (let j = 0; j < width; j++) {
+    for (let j = 0; j < size; j++) {
       var input = document.createElement("input");
       input.id = j;
       input.readOnly = true;
       input.type = "text";
       input.setAttribute('class', 'box'); 
       row.appendChild(input);
-      //spaces[i].push[j]
+      spaces[i][j] = null;
     }
   }
   const boxes = document.querySelectorAll('.box');
   boxes.forEach((box, i) => {
-    //box.setAttribute('id',i);
     box.addEventListener('click', boxClicked);
   });
-  console.log(spaces);
 };
 
 const resetBoard = () => {
@@ -42,14 +39,13 @@ const resetBoard = () => {
 const boxClicked = (e) => {
   const row_id = e.target.parentNode.id;
   const id = e.target.id;
-  console.log(e);
   if (!spaces[row_id][id]) {
     spaces[row_id][id] = currentPlayer;
     e.target.value = currentPlayer;
 
     if (playerWon()) {
       text.innerText = `${currentPlayer} has won!`;
-      // aspettiamo 1 secondo e poi torniamo alla schermata di inizio
+      
       var x = document.getElementById("restart");
       x.style.display = x.style.display === 'none' ? '' : 'none';
       setTimeout(function name(params) {
@@ -65,6 +61,19 @@ const boxClicked = (e) => {
     }
 
     if (playerDraw()) {
+      text.innerText = `It's a draw!!`;
+      
+      var x = document.getElementById("restart");
+      x.style.display = x.style.display === 'none' ? '' : 'none';
+      setTimeout(function name(params) {
+        text.innerText = `Play`;
+        var x = document.getElementById("board");
+        x.style.display = x.style.display === 'none' ? '' : 'none';
+        var x = document.getElementById("menu");
+        x.style.display = x.style.display === 'none' ? '' : 'none';
+        var x = document.getElementById("restart");
+        x.style.display = x.style.display === 'none' ? '' : 'none';
+      }, 1000)
       return;
     }
     currentPlayer = currentPlayer === tick_circle ? tick_x : tick_circle;
@@ -73,28 +82,61 @@ const boxClicked = (e) => {
 
 const playerWon = () => {
   const allEqual = arr => arr.every( v => v === currentPlayer )
+
   for (let index = 0; index < spaces.length; index++) {
-    if (allEqual(spaces[i])){
+    if (allEqual(spaces[index])) {
       return true;
     }
+  }
+
+  const arrayColumn = (arr, n) => arr.map(x => x[n]);
+  for (let index = 0; index < spaces[0].length; index++) {
+    if (allEqual(arrayColumn(spaces, index))) {
+      return true;
+    }
+  }
+  
+
+  let diagonalArray = [];
+  for (let i = 0; i < spaces.length; i++) {
+    for (let j = 0; j < spaces.length; j++) {
+      if (i == j) {
+        diagonalArray.push(spaces[i][j]);
+      }
+    }
+  }
+  if (allEqual(diagonalArray)) {
+    return true;
+  }
+
+  diagonalArray = [];
+  for (let i = 0; i < spaces.length; i++) {
+    for (let j = 0; j < spaces.length; j++) {
+      if ((i + j) == (spaces.length - 1)) {
+        diagonalArray.push(spaces[i][j]);
+      }
+    }
+  }
+  if (allEqual(diagonalArray)) {
+    return true;
   }
 };
 
 const playerDraw = () => {
-  let draw = 0;
-  spaces.forEach((space, i) => {
-    if (spaces[i] !== null) draw++;
-  });
-  /*if (draw === 9) {
-    console.log('è teoricamente un pareggio!!');
-    text.innerText = `Draw`;
-    restart();
-  }*/
+  let draw = [];
+  for(var i = 0; i < spaces.length; i++) {
+    for(var j = 0; j < spaces.length; j++) {
+      draw.push(spaces[i][j]);
+    }
+  }
+  if(draw.every(element => element !== null)) {
+    return true;
+  }
 };
 
 const restart = () => {
   resetBoard();
-
+  currentPlayer = tick_circle;
   spaces.forEach((space, i) => {
     spaces[i] = null;
   });
@@ -102,21 +144,20 @@ const restart = () => {
     box.value = '';
   });
   text.innerText = `Play`;
-  // inseriamo queste righe di codice per mostrare la griglia
-  // e togliere il menù nel momento in cui si inizia a giocare
+  
+  // show the grid and remove the menu
   var x = document.getElementById("menu");
   x.style.display = x.style.display === 'none' ? '' : 'none';
   var x = document.getElementById("board");
   x.style.display = x.style.display === 'none' ? '' : 'none';
-  var height = parseInt( document.getElementById('height').value );
-  var width = parseInt( document.getElementById('width').value );
-  drawBoard(height, width);
+  var size = parseInt( document.getElementById('size').value );
+  drawBoard(size);
 };
 restartBtn.addEventListener('click', restart);
 board.style.display = board.style.display === 'none' ? '' : 'none';
 
 
-// styling per il select 
+// styling for the select menu
 
 var x, i, j, l, ll, selElmnt, a, b, c;
 /* Look for any elements with the class "custom-select": */
