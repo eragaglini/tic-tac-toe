@@ -38,11 +38,23 @@ const resetBoard = () => {
 };
 
 const boxClicked = (e) => {
-  const row_id = e.target.parentNode.id;
-  const id = e.target.id;
+  let gameOver = playerMove(e.target);
+  ai_move = bestMove();
+  if (ai_move) {
+    row = board.childNodes[ai_move.i];
+    target = row.childNodes[ai_move.j];
+  }
+  if (!gameOver) {  
+    playerMove(target);
+  }
+};
+
+const playerMove = (target) => {
+  const row_id = target.parentNode.id;
+  const id = target.id;
   if (!spaces[row_id][id]) {
     spaces[row_id][id] = currentPlayer;
-    e.target.value = currentPlayer;
+    target.value = currentPlayer;
 
     if (playerWon()) {
       text.innerText = `${currentPlayer} has won!`;
@@ -58,7 +70,7 @@ const boxClicked = (e) => {
         var x = document.getElementById("restart");
         x.style.display = x.style.display === 'none' ? '' : 'none';
       }, 1000)
-      return;
+      return true;
     }
 
     if (playerDraw()) {
@@ -75,7 +87,7 @@ const boxClicked = (e) => {
         var x = document.getElementById("restart");
         x.style.display = x.style.display === 'none' ? '' : 'none';
       }, 1000)
-      return;
+      return true;
     }
     currentPlayer = currentPlayer === tick_circle ? tick_x : tick_circle;
   }
