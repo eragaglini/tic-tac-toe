@@ -3,7 +3,8 @@ const text = document.querySelector('#heading');
 const restartBtn = document.querySelector('#restart');
 const board = document.querySelector('#board');
 
-const spaces = [];
+//const spaces = [];
+let spaces = [];
 const tick_circle = 'O';
 const tick_x = 'X';
 let currentPlayer = tick_circle;
@@ -137,6 +138,7 @@ const playerDraw = () => {
 const restart = () => {
   resetBoard();
   currentPlayer = tick_circle;
+  spaces = [];
   spaces.forEach((space, i) => {
     spaces[i] = null;
   });
