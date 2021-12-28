@@ -50,13 +50,13 @@ const boxClicked = (e) => {
 };
 
 const playerMove = (target) => {
+  target.removeEventListener("click", boxClicked , false);
   const row_id = target.parentNode.id;
   const id = target.id;
   if (!spaces[row_id][id]) {
     spaces[row_id][id] = currentPlayer;
     target.value = currentPlayer;
-
-    if (playerWon()) {
+    if (playerWon()) { 
       text.innerText = `${currentPlayer} has won!`;
       
       var x = document.getElementById("restart");
@@ -119,7 +119,8 @@ const playerWon = () => {
     }
   }
   if (allEqual(diagonalArray)) {
-    return true;
+    // return true;
+    return {'currentPlayer': currentPlayer, 'win': true};
   }
 
   diagonalArray = [];
