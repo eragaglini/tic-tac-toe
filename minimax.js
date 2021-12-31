@@ -30,7 +30,7 @@ function bestMove() {
 let scores = {
     X: 10,
     O: -10
-  };
+};
 
 
 function minimax(spaces,depth, isMaximizing) {
@@ -71,7 +71,7 @@ function minimax(spaces,depth, isMaximizing) {
                 if (spaces[i][j] == null) {
                     spaces[i][j] = tick_circle;
                     console.log(spaces);
-                    let score = minimax(spaces, depth + 1, false);
+                    let score = minimax(spaces, depth + 1, true);
                     spaces[i][j] = null;
                     bestScore = Math.min(score, bestScore);
                 }
