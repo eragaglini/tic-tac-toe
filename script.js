@@ -74,7 +74,6 @@ const playerMove = (target) => {
         }
 
         if (playerDraw()) {
-            console.log(playerDraw());
             text.innerText = `It's a draw!!`;
 
             var x = document.getElementById("restart");
@@ -102,8 +101,6 @@ const playerWon = () => {
 
     for (let index = 0; index < spaces.length; index++) {
         if (allEqual(spaces[index]) && spaces[index][0] !== null) {
-            //console.log(spaces[index][0]);
-            console.log(spaces)
             return spaces[index][0];
         }
     }
@@ -112,7 +109,6 @@ const playerWon = () => {
     for (let index = 0; index < spaces[0].length; index++) {
         let column = arrayColumn(spaces, index);
         if (allEqual(column) && column[0] !== null) {
-          console.log(column[0]);
           return column[0];
         }
     }
@@ -128,7 +124,6 @@ const playerWon = () => {
     }
     if (allEqual(diagonalArray) && diagonalArray[0] !== null) {
         // return true;
-        console.log(diagonalArray[0])
         return diagonalArray[0];
     }
 
@@ -141,7 +136,6 @@ const playerWon = () => {
         }
     }
     if (allEqual(diagonalArray)  && diagonalArray[0] !== null) {
-        console.log(diagonalArray[0]);
         return diagonalArray[0];
     }
 
