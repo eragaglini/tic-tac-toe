@@ -97,7 +97,9 @@ const playerMove = (target) => {
 const playerWon = () => {
     //console.log(spaces);
     //const allEqual = arr => arr.every(v => v === currentPlayer)
-    const allEqual = arr => arr.length && arr.reduce(function(a, b){return (a === b)?a:false;}) === arr[0];
+    const allEqual = arr => arr.length && arr.reduce(function(a, b) {
+        return (a === b) ? a : false;
+    }) === arr[0];
 
     for (let index = 0; index < spaces.length; index++) {
         if (allEqual(spaces[index]) && spaces[index][0] !== null) {
@@ -109,7 +111,7 @@ const playerWon = () => {
     for (let index = 0; index < spaces[0].length; index++) {
         let column = arrayColumn(spaces, index);
         if (allEqual(column) && column[0] !== null) {
-          return column[0];
+            return column[0];
         }
     }
 
@@ -135,7 +137,7 @@ const playerWon = () => {
             }
         }
     }
-    if (allEqual(diagonalArray)  && diagonalArray[0] !== null) {
+    if (allEqual(diagonalArray) && diagonalArray[0] !== null) {
         return diagonalArray[0];
     }
 
