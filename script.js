@@ -95,7 +95,6 @@ const playerMove = (target) => {
 
 
 const playerWon = () => {
-    //console.log(spaces);
     //const allEqual = arr => arr.every(v => v === currentPlayer)
     const allEqual = arr => arr.length && arr.reduce(function(a, b) {
         return (a === b) ? a : false;

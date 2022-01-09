@@ -1,78 +1,63 @@
-// Tic Tac Toe AI with Minimax Algorithm
-// The Coding Train / Daniel Shiffman
-// https://thecodingtrain.com/CodingChallenges/154-tic-tac-toe-minimax.html
-// https://youtu.be/I64-UTORVfU
-// https://editor.p5js.org/codingtrain/sketches/0zyUhZdJD
 function bestMove() {
-    // AI to make its turn
-    let bestScore = -Infinity;
-    let move;
-    for (let i = 0; i < spaces.length; i++) {
-        for (let j = 0; j < spaces[i].length; j++) {
-            // Is the spot available?
-            if (spaces[i][j] == null) {
-                spaces[i][j] = tick_x;
-                let score = minimax(spaces, 0, false);
-                spaces[i][j] = null;
-                //if (score > bestScore) {
-                if (score >= bestScore) {
-                    bestScore = score;
-                    move = {
-                        i,
-                        j
-                    };
-                }
-            }
-        }
-    }
-    return move;
+    return minimax(spaces, 0, true).index;
 }
 
-let scores = {
-    X: 10,
-    O: -10
-};
-
-
 function minimax(spaces, depth, isMaximizing) {
-    //return 1;
-    let result = playerWon();
-    if (result) {
-        return scores[result];
+    
+    let win = playerWon();
+    if (win === 'X') {
+        return { score: 10 };
+    }
+    if (win === 'O') {
+        return { score: -10 };
     }
 
-    result = playerDraw();
-    if (result === 'tie') {
-        return 0;
+    draw = playerDraw();
+    if (draw === 'tie') {
+        return { score: 0 };
     }
+    let moves = [];
+    let move = {};
 
-    if (isMaximizing) {
-        let bestScore = -Infinity;
-        for (let i = 0; i < spaces.length; i++) {
-            for (let j = 0; j < spaces[i].length; j++) {
-                // Is the spot available?
-                if (spaces[i][j] == null) {
+    for (let i = 0; i < spaces.length; i++) {
+        for (let j = 0; j < spaces[i].length; j++) {
+            if (spaces[i][j] === null) {
+                if (isMaximizing) {
+                    move.index = {i: i, j: j};
                     spaces[i][j] = tick_x;
-                    let score = minimax(spaces, depth + 1, false);
+                    let result = minimax(spaces, depth + 1, false);
                     spaces[i][j] = null;
-                    bestScore = Math.max(score, bestScore);
-                }
-            }
-        }
-        return bestScore;
-    } else {
-        let bestScore = Infinity;
-        for (let i = 0; i < spaces.length; i++) {
-            for (let j = 0; j < spaces[i].length; j++) {
-                // Is the spot available?
-                if (spaces[i][j] == null) {
+                    move.score = result.score;
+                } else {
+                    move.index = {i: i, j: j};
                     spaces[i][j] = tick_circle;
-                    let score = minimax(spaces, depth + 1, true);
+                    let result = minimax(spaces, depth + 1, true);
                     spaces[i][j] = null;
-                    bestScore = Math.min(score, bestScore);
+                    move.score = result.score;
                 }
+                //moves.push(move);
+                moves.push({index: move.index, score: move.score});
             }
         }
-        return bestScore;
     }
+
+    var bestMove;
+    if (isMaximizing) {
+        var bestScore = -Infinity;
+        for (var i = 0; i < moves.length; i++) {
+            if (moves[i].score > bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    } else {
+        var bestScore = Infinity;
+        for (var i = 0; i < moves.length; i++) {
+            if (moves[i].score < bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    }
+    return moves[bestMove];
 }
