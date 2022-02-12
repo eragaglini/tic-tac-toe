@@ -1,66 +1,71 @@
 function bestMove() {
-    return minimax(spaces, 0, true).index;
-}
-
-function minimax(spaces, depth, isMaximizing) {
-    
-    var win = playerWon();
-    if (win === 'X') {
-        return { score: 10, depth: depth };
-    }
-    if (win === 'O') {
-        return { score: -10, depth:depth };
-    }
-
-    draw = playerDraw();
-    if (draw === 'tie') {
-        return { score: 0, depth: depth };
-    }
-    var moves = [];
-    var move = {};
-
+    var newState =  minimax(spaces, 0, true, -Infinity, Infinity)[1];
     for (let i = 0; i < spaces.length; i++) {
         for (let j = 0; j < spaces[i].length; j++) {
-            if (spaces[i][j] === null) {
-                move.index = {i: i, j: j};
-                if (isMaximizing) {
-                    spaces[i][j] = tick_x;
-                    var result = minimax(spaces, depth + 1, false);
-                    spaces[i][j] = null;
-                    move.score = result.score;
-                } else {
-                    spaces[i][j] = tick_circle;
-                    var result = minimax(spaces, depth + 1, true);
-                }
-                spaces[i][j] = null;
-                move.score = result.score;
-                move.depth = result.depth;
-                //moves.push(move);
-                moves.push({index: move.index, score: move.score, depth: move.depth});
+            if (newState[i][j] !== spaces[i][j]) {
+                return {i, j}
             }
-        }
+        }        
     }
 
-    var bestMove;
-    var minimum_depth = Infinity;
-    if (isMaximizing) {
-        var bestScore = -Infinity;
-        for (var i = 0; i < moves.length; i++) {
-            if (moves[i].score > bestScore || (moves[i].score == bestScore && moves[i].depth < minimum_depth)) {
-                bestScore = moves[i].score;
-                bestMove = i;
-                minimum_depth = moves[i].depth;
-            }
-        }
-    } else {
-        var bestScore = Infinity;
-        for (var i = 0; i < moves.length; i++) {
-            if (moves[i].score < bestScore || (moves[i].score == bestScore && moves[i].depth < minimum_depth))  {
-                bestScore = moves[i].score;
-                bestMove = i;
-                minimum_depth = moves[i].depth;
-            }
-        }
+}
+
+function minimax(state, depth, max, alpha, beta) {
+    // minimax logic goes here
+    let win = playerWon();
+    if (win === "X") {
+        return [10, state, depth];
+    } else if (win === "O") {
+        return [-10, state, depth];
     }
-    return moves[bestMove];
+    let draw = playerDraw()
+    if (draw) {
+        return [0, state, depth];
+    }
+
+    if (max) {
+        let maxState;
+        let maxScore = -9999;
+        for (let i = 0; i < state.length; i++) {
+            for (let j = 0; j < state[i].length; j++) {
+                if (state[i][j] == null) {
+                    state[i][j] = "X";
+                    if (beta <= alpha) {
+                        state[i][j] = null;
+                        continue;
+                    }
+                    let temp = minimax(state, depth + 1, false, alpha, beta);
+                    if ((temp[0] - temp[2]) > maxScore) {
+                        maxScore = temp[0] - temp[2];
+                        alpha = maxScore;
+                        maxState = JSON.parse(JSON.stringify(state));
+                    }
+                    state[i][j] = null;
+                }
+            }
+        }
+        return [maxScore,maxState,depth];
+    } else {
+        let minState;
+        let minScore = 9999;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (state[i][j] == null) {
+                    state[i][j] = "O";
+                    if (beta <= alpha) {
+                        state[i][j] = null;
+                        continue;
+                    }
+                    let temp = minimax(state, depth + 1, true, alpha, beta);
+                    if ((temp[0] + temp[2]) < minScore) {
+                        minScore = temp[0] + temp[2];
+                        beta = minScore;
+                        minState = JSON.parse(JSON.stringify(state));
+                    }
+                    state[i][j] = null;
+                }
+            }
+        }
+        return [minScore,minState,depth];
+    }
 }
